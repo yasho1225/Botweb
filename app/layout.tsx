@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 
@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   title: "BotWeb — Free Websites for Nonprofits & Clubs",
   description:
     "Student-run initiative: free professional websites and AI chatbots for nonprofits, school clubs, and community organizations.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#07070c",
 };
 
 export default function RootLayout({

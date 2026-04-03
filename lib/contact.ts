@@ -7,6 +7,7 @@ export const BOT_TEAM_EMAILS = [
   "dasari.tarunp16@gmail.com",
 ] as const;
 
+/** Comma-separated for `mailto:?to=` (reaches everyone in one draft). */
 export const MAILTO_RECIPIENTS = BOT_TEAM_EMAILS.join(",");
 
 export const PRIMARY_CONTACT_EMAIL = BOT_TEAM_EMAILS[0];

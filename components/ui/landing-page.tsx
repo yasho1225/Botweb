@@ -8,7 +8,7 @@ import { ArrowRight, Bot, Globe, Handshake, Mail, Smartphone, Sparkles } from "l
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS, PRIMARY_CONTACT_EMAIL } from "@/lib/contact";
+import { BOT_TEAM_EMAILS, MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS } from "@/lib/contact";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 16 },
@@ -44,27 +44,23 @@ export function BotWebMarketingBelowHero() {
   async function handleContactSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_URL?.trim();
-    if (!endpoint) {
-      setFormStatus("error");
-      setFormError(
-        "Form endpoint not set. Add NEXT_PUBLIC_FORMSPREE_URL in .env.local (your Formspree form URL), or use the email link.",
-      );
-      return;
-    }
-
     setFormStatus("sending");
     setFormError(null);
     const fd = new FormData(form);
-    const org = String(fd.get("org") ?? "");
-    fd.append("_subject", `BotWeb project request: ${org}`);
-    fd.append("_replyto", String(fd.get("email") ?? ""));
+    const payload = {
+      org: String(fd.get("org") ?? "").trim(),
+      contact: String(fd.get("contact") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      orgType: String(fd.get("orgType") ?? "").trim(),
+      message: String(fd.get("message") ?? "").trim(),
+      website: String(fd.get("website") ?? "").trim(),
+    };
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        body: fd,
-        headers: { Accept: "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
@@ -83,7 +79,7 @@ export function BotWebMarketingBelowHero() {
   return (
     <div className="flex min-h-0 flex-col bg-background">
       <main className="flex-1">
-        <section id="why" className="w-full scroll-mt-24 py-14 md:py-20">
+        <section id="why" className="w-full scroll-mt-[5.25rem] py-12 sm:scroll-mt-24 sm:py-14 md:py-20">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -92,14 +88,14 @@ export function BotWebMarketingBelowHero() {
             className="container px-4 md:px-6"
           >
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                 Why BotWeb
               </h2>
-              <p className="mt-3 text-muted-foreground md:text-lg">
+              <p className="mt-3 text-sm text-muted-foreground sm:text-base md:text-lg">
                 Custom work and real collaboration — not templates dropped in your inbox.
               </p>
             </div>
-            <div className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
+            <div className="mx-auto mt-8 grid max-w-4xl gap-3 sm:mt-10 sm:gap-4 md:grid-cols-2">
               {[
                 {
                   n: "01",
@@ -129,10 +125,10 @@ export function BotWebMarketingBelowHero() {
                   viewport={{ once: true }}
                   variants={itemFadeIn}
                   transition={{ delay: 0.04 * i }}
-                  className="rounded-2xl border border-border bg-card/60 p-6 shadow-sm"
+                  className="rounded-2xl border border-border bg-card/60 p-5 shadow-sm sm:p-6"
                 >
-                  <span className="font-display text-2xl text-primary/40">{item.n}</span>
-                  <h3 className="mt-1 font-display text-lg text-foreground">{item.title}</h3>
+                  <span className="font-display text-xl text-primary/40 sm:text-2xl">{item.n}</span>
+                  <h3 className="mt-1 font-display text-base text-foreground sm:text-lg">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
                 </motion.div>
               ))}
@@ -140,7 +136,7 @@ export function BotWebMarketingBelowHero() {
           </motion.div>
         </section>
 
-        <section id="what" className="w-full scroll-mt-24 border-t border-border py-14 md:py-20">
+        <section id="what" className="w-full scroll-mt-[5.25rem] border-t border-border py-12 sm:scroll-mt-24 sm:py-14 md:py-20">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -149,10 +145,10 @@ export function BotWebMarketingBelowHero() {
             className="container px-4 md:px-6"
           >
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                 What we build
               </h2>
-              <p className="mt-3 text-muted-foreground md:text-lg">
+              <p className="mt-3 text-sm text-muted-foreground sm:text-base md:text-lg">
                 Websites and chatbots for missions that deserve to look as good as the work they do.
               </p>
             </div>
@@ -161,7 +157,7 @@ export function BotWebMarketingBelowHero() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2"
+              className="mx-auto mt-8 grid max-w-4xl gap-3 sm:mt-10 sm:gap-4 sm:grid-cols-2"
             >
               {[
                 {
@@ -188,17 +184,17 @@ export function BotWebMarketingBelowHero() {
                 <motion.div
                   key={service.title}
                   variants={itemFadeIn}
-                  className="rounded-2xl border border-border bg-card/60 p-6 shadow-sm transition-shadow hover:shadow-md"
+                  className="rounded-2xl border border-border bg-card/60 p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
                 >
                   <div className="mb-3">{service.icon}</div>
-                  <h3 className="text-lg font-semibold text-foreground">{service.title}</h3>
+                  <h3 className="text-base font-semibold text-foreground sm:text-lg">{service.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
                 </motion.div>
               ))}
             </motion.div>
-            <p className="mt-10 text-center">
-              <Button className="rounded-full px-8" asChild>
-                <Link href="#contact">
+            <p className="mt-8 flex justify-center px-2 sm:mt-10">
+              <Button className="h-12 w-full max-w-sm rounded-full px-8 sm:h-10 sm:w-auto sm:max-w-none" asChild>
+                <Link href="#contact" className="touch-manipulation">
                   Request a site
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -207,7 +203,10 @@ export function BotWebMarketingBelowHero() {
           </motion.div>
         </section>
 
-        <section id="process" className="w-full scroll-mt-24 border-t border-border bg-card-muted/30 py-14 md:py-20">
+        <section
+          id="process"
+          className="w-full scroll-mt-[5.25rem] border-t border-border bg-card-muted/30 py-12 sm:scroll-mt-24 sm:py-14 md:py-20"
+        >
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -216,12 +215,14 @@ export function BotWebMarketingBelowHero() {
             className="container px-4 md:px-6"
           >
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                 How it works
               </h2>
-              <p className="mt-3 text-muted-foreground md:text-lg">Four steps from first email to a live site.</p>
+              <p className="mt-3 text-sm text-muted-foreground sm:text-base md:text-lg">
+                Four steps from first email to a live site.
+              </p>
             </div>
-            <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mx-auto mt-8 grid max-w-5xl gap-3 sm:mt-10 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
               {[
                 { n: "1", title: "Reach out", text: "Tell us about your org and what you need. No commitment." },
                 { n: "2", title: "Plan", text: "We align on scope, timeline, and what success looks like." },
@@ -234,10 +235,12 @@ export function BotWebMarketingBelowHero() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="rounded-2xl border border-border bg-background/80 p-5"
+                  className="rounded-2xl border border-border bg-background/80 p-4 sm:p-5"
                 >
-                  <span className="font-display text-xl text-primary">{step.n}</span>
-                  <h3 className="mt-1 font-display text-base font-semibold text-foreground">{step.title}</h3>
+                  <span className="font-display text-lg text-primary sm:text-xl">{step.n}</span>
+                  <h3 className="mt-1 font-display text-[0.95rem] font-semibold text-foreground sm:text-base">
+                    {step.title}
+                  </h3>
                   <p className="mt-2 text-sm text-muted-foreground">{step.text}</p>
                 </motion.div>
               ))}
@@ -245,7 +248,7 @@ export function BotWebMarketingBelowHero() {
           </motion.div>
         </section>
 
-        <section id="contact" className="w-full scroll-mt-24 border-t border-border py-14 md:py-24">
+        <section id="contact" className="w-full scroll-mt-[5.25rem] border-t border-border py-12 sm:scroll-mt-24 sm:py-14 md:py-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -253,28 +256,32 @@ export function BotWebMarketingBelowHero() {
             variants={fadeIn}
             className="container px-4 md:px-6"
           >
-            <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:gap-12">
+            <div className="mx-auto grid max-w-5xl gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
               <div className="space-y-4">
-                <h2 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                   Work with us
                 </h2>
-                <p className="text-muted-foreground md:text-lg">
+                <p className="text-sm text-muted-foreground sm:text-base md:text-lg">
                   Tell us about your organization. We typically reply within a few business days.{" "}
                   <span className="font-medium text-foreground">Always free.</span>
                 </p>
                 <a
                   href={`mailto:${MAILTO_RECIPIENTS}`}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                  className="inline-flex max-w-full items-start gap-2 text-sm font-medium text-primary hover:underline sm:items-center"
                 >
-                  <Mail className="h-4 w-4" />
-                  {PRIMARY_CONTACT_EMAIL}
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 sm:mt-0" />
+                  <span className="flex min-w-0 flex-col gap-1 break-all">
+                    {BOT_TEAM_EMAILS.map((address) => (
+                      <span key={address}>{address}</span>
+                    ))}
+                  </span>
                 </a>
                 <p className="text-xs text-muted-foreground">
-                  Prefer email? The link above reaches the full team. The form uses Formspree (no API key on this site —
-                  add all recipients in your Formspree dashboard).
+                  Prefer email? The link above reaches the full team. The form sends through our server — your message is
+                  delivered by email; we never put API keys in the browser.
                 </p>
               </div>
-              <div className="rounded-2xl border border-border bg-card/60 p-6 shadow-sm">
+              <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-sm sm:p-6">
                 {formStatus === "success" ? (
                   <div className="space-y-4 py-2 text-center">
                     <p className="font-display text-lg font-semibold text-foreground">Thanks — we got your request.</p>
@@ -292,17 +299,33 @@ export function BotWebMarketingBelowHero() {
                   </div>
                 ) : (
                   <form className="space-y-4" onSubmit={handleContactSubmit}>
+                    <div className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0" aria-hidden>
+                      <label htmlFor="website">Website</label>
+                      <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+                    </div>
                     <div className="space-y-2">
                       <label htmlFor="org" className="text-sm font-medium text-foreground">
                         Organization
                       </label>
-                      <Input id="org" name="org" required placeholder="Organization name" className="rounded-xl" />
+                      <Input
+                      id="org"
+                      name="org"
+                      required
+                      placeholder="Organization name"
+                      className="rounded-xl text-base sm:text-sm"
+                    />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="contact" className="text-sm font-medium text-foreground">
                         Your name
                       </label>
-                      <Input id="contact" name="contact" required placeholder="Name" className="rounded-xl" />
+                      <Input
+                      id="contact"
+                      name="contact"
+                      required
+                      placeholder="Name"
+                      className="rounded-xl text-base sm:text-sm"
+                    />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="email" className="text-sm font-medium text-foreground">
@@ -314,7 +337,7 @@ export function BotWebMarketingBelowHero() {
                         type="email"
                         required
                         placeholder="you@organization.org"
-                        className="rounded-xl"
+                        className="rounded-xl text-base sm:text-sm"
                       />
                     </div>
                     <div className="space-y-2">
@@ -326,7 +349,7 @@ export function BotWebMarketingBelowHero() {
                         name="orgType"
                         required
                         defaultValue=""
-                        className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-10 sm:text-sm"
                       >
                         <option value="" disabled>
                           Select…
@@ -347,16 +370,20 @@ export function BotWebMarketingBelowHero() {
                         name="message"
                         required
                         placeholder="What you need, timeline, links…"
-                        className="min-h-[100px] rounded-xl"
+                        className="min-h-[100px] rounded-xl text-base sm:text-sm"
                       />
                     </div>
                     {formError ? <p className="text-sm text-red-400">{formError}</p> : null}
-                    <Button type="submit" className="w-full rounded-xl" disabled={formStatus === "sending"}>
+                    <Button
+                      type="submit"
+                      className="h-12 w-full rounded-xl touch-manipulation sm:h-10"
+                      disabled={formStatus === "sending"}
+                    >
                       {formStatus === "sending" ? "Sending…" : "Send request"}
                       {formStatus !== "sending" ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
                     </Button>
                     <p className="text-center text-xs text-muted-foreground">
-                      List every teammate in Formspree notifications. Replies use the email you enter above.
+                      Replies go to the email you enter above. The team is notified automatically.
                     </p>
                   </form>
                 )}
@@ -366,8 +393,8 @@ export function BotWebMarketingBelowHero() {
         </section>
       </main>
 
-      <footer className="border-t border-border bg-card-muted/20">
-        <div className="container grid gap-10 px-4 py-12 md:grid-cols-3 md:px-6">
+      <footer className="border-t border-border bg-card-muted/20 pb-[env(safe-area-inset-bottom,0px)]">
+        <div className="container grid gap-8 py-10 sm:gap-10 sm:py-12 md:grid-cols-3">
           <div className="space-y-3">
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
@@ -381,17 +408,17 @@ export function BotWebMarketingBelowHero() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground">On this page</h3>
-            <nav className="mt-3 flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="#why" className="hover:text-foreground">
+            <nav className="mt-3 flex flex-col gap-1 text-sm text-muted-foreground">
+              <Link href="#why" className="rounded-md py-2 hover:text-foreground">
                 Why BotWeb
               </Link>
-              <Link href="#what" className="hover:text-foreground">
+              <Link href="#what" className="rounded-md py-2 hover:text-foreground">
                 What we build
               </Link>
-              <Link href="#process" className="hover:text-foreground">
+              <Link href="#process" className="rounded-md py-2 hover:text-foreground">
                 How it works
               </Link>
-              <Link href="#contact" className="hover:text-foreground">
+              <Link href="#contact" className="rounded-md py-2 hover:text-foreground">
                 Contact
               </Link>
             </nav>
@@ -400,10 +427,14 @@ export function BotWebMarketingBelowHero() {
             <h3 className="text-sm font-semibold text-foreground">Contact</h3>
             <a
               href={`mailto:${MAILTO_RECIPIENTS}`}
-              className="mt-3 inline-flex items-center gap-2 text-sm text-primary hover:underline"
+              className="mt-3 inline-flex max-w-full items-start gap-2 text-sm text-primary hover:underline"
             >
-              <Mail className="h-4 w-4 shrink-0" />
-              {PRIMARY_CONTACT_EMAIL}
+              <Mail className="mt-0.5 h-4 w-4 shrink-0" />
+              <span className="flex min-w-0 flex-col gap-1 break-all">
+                {BOT_TEAM_EMAILS.map((address) => (
+                  <span key={address}>{address}</span>
+                ))}
+              </span>
             </a>
             <p className="mt-4 text-xs text-muted-foreground">
               Know an org that needs a site? Point them here.
