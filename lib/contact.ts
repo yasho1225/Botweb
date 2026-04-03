@@ -1,11 +1,5 @@
 /** Inbound project-request notifications (Resend `to` list). */
-export const BOT_TEAM_EMAILS = [
-  "developmentbotweb@gmail.com",
-  "yashoin1225@gmail.com",
-  "anishbkumar16@gmail.com",
-  "aarush.agarwal4679@gmail.com",
-  "dasari.tarunp16@gmail.com",
-] as const;
+export const BOT_TEAM_EMAILS = ["developmentbotweb@gmail.com"] as const;
 
 /** Comma-separated for `mailto:?to=` (reaches everyone in one draft). */
 export const MAILTO_RECIPIENTS = BOT_TEAM_EMAILS.join(",");
