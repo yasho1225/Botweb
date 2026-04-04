@@ -300,8 +300,13 @@ export function BotWebMarketingBelowHero() {
                   </span>
                 </a>
                 <p className="text-xs text-muted-foreground">
-                  Prefer email? The link above reaches the full team. This form posts to{" "}
-                  {process.env.NEXT_PUBLIC_FORMSPREE_URL ? "Formspree" : "our site’s email API (needs Resend env on the host)"}.
+                  Prefer email? The link above reaches the full team. This form submits through{" "}
+                  <a href="https://formspree.io" className="text-primary underline-offset-2 hover:underline">
+                    Formspree
+                  </a>
+                  . The site needs <span className="font-mono text-[11px] text-foreground/90">NEXT_PUBLIC_FORMSPREE_URL</span>{" "}
+                  configured on the host — otherwise the form will show an error until it is set. Add teammates in your
+                  Formspree notification list.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-sm sm:p-6">
