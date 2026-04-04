@@ -44,28 +44,51 @@ export function BotWebMarketingBelowHero() {
   async function handleContactSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    setFormStatus("sending");
     setFormError(null);
-    const fd = new FormData(form);
-    const payload = {
-      org: String(fd.get("org") ?? "").trim(),
-      contact: String(fd.get("contact") ?? "").trim(),
-      email: String(fd.get("email") ?? "").trim(),
-      orgType: String(fd.get("orgType") ?? "").trim(),
-      message: String(fd.get("message") ?? "").trim(),
-      website: String(fd.get("website") ?? "").trim(),
-    };
+
+    const raw = process.env.NEXT_PUBLIC_FORMSPREE_URL?.trim() ?? "";
+    const formspreeUrl =
+      raw.length >= 2 && ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'")))
+        ? raw.slice(1, -1).trim()
+        : raw;
+    if (!formspreeUrl) {
+      setFormStatus("error");
+      setFormError(
+        "Contact form is not configured. Add NEXT_PUBLIC_FORMSPREE_URL to .env.local (your Formspree form URL) and restart the dev server.",
+      );
+      return;
+    }
+
+    setFormStatus("sending");
 
     try {
-      const res = await fetch("/api/contact", {
+      const fd = new FormData(form);
+      const org = String(fd.get("org") ?? "").trim();
+      fd.append("_subject", `BotWeb project request: ${org}`);
+      fd.append("_replyto", String(fd.get("email") ?? ""));
+      const res = await fetch(formspreeUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
+        body: fd,
+        headers: { Accept: "application/json" },
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        errors?: Record<string, string | string[]>;
+      };
       if (!res.ok) {
         setFormStatus("error");
-        setFormError(data.error ?? "Could not send. Try again or use the email link below.");
+        const fromErrors = data.errors
+          ? Object.values(data.errors)
+              .flat()
+              .map((x) => (Array.isArray(x) ? x.join(" ") : x))
+              .filter(Boolean)
+              .join(" ")
+          : "";
+        setFormError(
+          data.error ||
+            fromErrors ||
+            "Formspree rejected the submission. Check your form URL and Formspree dashboard.",
+        );
         return;
       }
       setFormStatus("success");
@@ -277,8 +300,8 @@ export function BotWebMarketingBelowHero() {
                   </span>
                 </a>
                 <p className="text-xs text-muted-foreground">
-                  Prefer email? The link above reaches the full team. The form sends through our server — your message is
-                  delivered by email; we never put API keys in the browser.
+                  Prefer email? The link above reaches the full team. This form posts to{" "}
+                  {process.env.NEXT_PUBLIC_FORMSPREE_URL ? "Formspree" : "our site’s email API (needs Resend env on the host)"}.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-sm sm:p-6">
@@ -298,11 +321,15 @@ export function BotWebMarketingBelowHero() {
                     </Button>
                   </div>
                 ) : (
-                  <form className="space-y-4" onSubmit={handleContactSubmit}>
-                    <div className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0" aria-hidden>
-                      <label htmlFor="website">Website</label>
-                      <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
-                    </div>
+                  <form className="relative space-y-4" onSubmit={handleContactSubmit}>
+                    <input
+                      type="text"
+                      name="_gotcha"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      className="pointer-events-none absolute left-0 top-0 h-0 w-0 opacity-0"
+                      aria-hidden
+                    />
                     <div className="space-y-2">
                       <label htmlFor="org" className="text-sm font-medium text-foreground">
                         Organization
@@ -383,7 +410,7 @@ export function BotWebMarketingBelowHero() {
                       {formStatus !== "sending" ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
                     </Button>
                     <p className="text-center text-xs text-muted-foreground">
-                      Replies go to the email you enter above. The team is notified automatically.
+                      Replies go to the email you enter above. Formspree emails everyone on your form’s notification list.
                     </p>
                   </form>
                 )}

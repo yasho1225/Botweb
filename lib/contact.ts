@@ -1,4 +1,4 @@
-/** Inbound project-request notifications (Resend `to` list). */
+/** Shown in mailto links; add the same addresses in your Formspree form settings for notifications. */
 export const BOT_TEAM_EMAILS = ["developmentbotweb@gmail.com"] as const;
 
 /** Comma-separated for `mailto:?to=` (reaches everyone in one draft). */

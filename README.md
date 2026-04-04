@@ -15,7 +15,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Environment
 
-Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_FORMSPREE_URL` for the contact form ([Formspree](https://formspree.io)).
+Copy `.env.example` to `.env.local` and set **`NEXT_PUBLIC_FORMSPREE_URL`** to your [Formspree](https://formspree.io) form endpoint. Add all team emails in the Formspree dashboard (no custom domain required).
 
 ## Deploy
 
