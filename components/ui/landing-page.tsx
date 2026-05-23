@@ -54,7 +54,7 @@ export function BotWebMarketingBelowHero() {
     if (!formspreeUrl) {
       setFormStatus("error");
       setFormError(
-        "Contact form is not configured. Add NEXT_PUBLIC_FORMSPREE_URL to .env.local (your Formspree form URL) and restart the dev server.",
+        "This form is temporarily unavailable. Please email us using the addresses on the left.",
       );
       return;
     }
@@ -87,7 +87,7 @@ export function BotWebMarketingBelowHero() {
         setFormError(
           data.error ||
             fromErrors ||
-            "Formspree rejected the submission. Check your form URL and Formspree dashboard.",
+            "We couldn’t send that just now. Try again in a moment, or email us using the addresses on the left.",
         );
         return;
       }
@@ -95,7 +95,9 @@ export function BotWebMarketingBelowHero() {
       form.reset();
     } catch {
       setFormStatus("error");
-      setFormError("Network error. Try again or email us directly.");
+      setFormError(
+        "We couldn’t connect just now. Please try again, or email us using the addresses on the left.",
+      );
     }
   }
 
@@ -300,13 +302,7 @@ export function BotWebMarketingBelowHero() {
                   </span>
                 </a>
                 <p className="text-xs text-muted-foreground">
-                  Prefer email? The link above reaches the full team. This form submits through{" "}
-                  <a href="https://formspree.io" className="text-primary underline-offset-2 hover:underline">
-                    Formspree
-                  </a>
-                  . The site needs <span className="font-mono text-[11px] text-foreground/90">NEXT_PUBLIC_FORMSPREE_URL</span>{" "}
-                  configured on the host — otherwise the form will show an error until it is set. Add teammates in your
-                  Formspree notification list.
+                  Prefer email? The addresses above reach our team directly, and we respond to every inquiry.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-sm sm:p-6">
@@ -414,9 +410,6 @@ export function BotWebMarketingBelowHero() {
                       {formStatus === "sending" ? "Sending…" : "Send request"}
                       {formStatus !== "sending" ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
                     </Button>
-                    <p className="text-center text-xs text-muted-foreground">
-                      Replies go to the email you enter above. Formspree emails everyone on your form’s notification list.
-                    </p>
                   </form>
                 )}
               </div>
