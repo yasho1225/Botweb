@@ -302,7 +302,7 @@ export function BotWebMarketingBelowHero() {
                   </span>
                 </a>
                 <p className="text-xs text-muted-foreground">
-                  Prefer email? The addresses above reach our team directly, and we respond to every inquiry.
+                  Prefer email? The address above reaches our team directly, and we respond to every inquiry.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-sm sm:p-6">
