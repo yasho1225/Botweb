@@ -42,6 +42,22 @@ export function HeroSection() {
       />
 
       <div className="relative mx-auto w-full max-w-4xl">
+        {/* Social proof badges */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: EASE.out }}
+          className="mb-5 flex flex-wrap items-center justify-center gap-2"
+        >
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(74,222,128,0.22)] bg-[rgba(74,222,128,0.07)] px-3 py-1 text-xs font-medium text-[rgba(74,222,128,0.85)]">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[rgba(74,222,128,0.85)]" aria-hidden />
+            Now accepting applications
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(148,163,184,0.12)] bg-[rgba(148,163,184,0.06)] px-3 py-1 text-xs font-medium text-muted">
+            8+ nonprofits served
+          </span>
+        </motion.div>
+
         {/* Label */}
         <motion.p
           initial={reduced ? false : { opacity: 0, y: 10 }}
@@ -126,6 +142,16 @@ export function HeroSection() {
             See what we build
           </MagneticButton>
         </motion.div>
+
+        {/* Reassurance micro-copy */}
+        <motion.p
+          initial={reduced ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.7, ease: EASE.out }}
+          className="mt-4 text-[11px] text-[rgba(148,163,184,0.32)]"
+        >
+          No fees, ever · Limited spots each semester · Students who care
+        </motion.p>
       </div>
 
       {/* Bottom fade */}

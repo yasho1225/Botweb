@@ -11,6 +11,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { BOT_TEAM_EMAILS, MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS } from "@/lib/contact";
 import { EASE } from "@/lib/motion";
 
+const NEXT_STEPS = [
+  { n: "01", text: "We review your application (1–2 business days)" },
+  { n: "02", text: "A quick intro call to align on your goals and scope" },
+  { n: "03", text: "Design, build, and launch in 6–8 weeks" },
+] as const;
+
 export function ContactSection() {
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formError, setFormError] = useState<string | null>(null);
@@ -28,7 +34,7 @@ export function ContactSection() {
     if (!formspreeUrl) {
       setFormStatus("idle");
       setFormError(
-        "This form is temporarily unavailable. Please email us using the address listed in the contact section.",
+        "This form is temporarily unavailable. Please email us using the address listed below.",
       );
       return;
     }
@@ -61,7 +67,7 @@ export function ContactSection() {
         setFormError(
           data.error ||
             fromErrors ||
-            "We couldn't send that just now. Try again in a moment, or email us using the address in the contact section.",
+            "We couldn't send that just now. Try again in a moment, or email us directly.",
         );
         return;
       }
@@ -70,7 +76,7 @@ export function ContactSection() {
     } catch {
       setFormStatus("idle");
       setFormError(
-        "We couldn't connect just now. Please try again, or email us using the address in the contact section.",
+        "We couldn't connect just now. Please try again, or email us directly.",
       );
     }
   }
@@ -83,28 +89,51 @@ export function ContactSection() {
       <div className="container">
         <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:gap-16">
           <Reveal variant="blurUp">
-            <span className="section-label mb-4">Contact</span>
+            <span className="section-label mb-4">Apply</span>
             <h2 className="font-display text-balance text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Work with us
+              Apply for your free site
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-              Tell us about your organization. We typically reply within a few business days.{" "}
-              <span className="font-medium text-foreground">Always free.</span>
+              Tell us about your organization. We review every request and reply within 2 business
+              days.{" "}
+              <span className="font-medium text-foreground">No pitch. No fees. Ever.</span>
             </p>
-            <a
-              href={`mailto:${MAILTO_RECIPIENTS}`}
-              className="mt-6 inline-flex max-w-full cursor-pointer items-start gap-2 text-sm font-medium text-accent transition hover:text-accent-bright sm:items-center"
-            >
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 sm:mt-0" />
-              <span className="flex min-w-0 flex-col gap-1 break-all">
-                {BOT_TEAM_EMAILS.map((address) => (
-                  <span key={address}>{address}</span>
-                ))}
-              </span>
-            </a>
-            <p className="mt-4 text-xs text-muted-foreground">
-              Prefer email? The address above reaches our team directly, and we respond to every inquiry.
-            </p>
+
+            {/* What happens next */}
+            <div className="mt-8 space-y-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                What happens next
+              </p>
+              {NEXT_STEPS.map(({ n, text }) => (
+                <div key={n} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-[11px] font-semibold text-accent">
+                    {n}
+                  </span>
+                  <p className="text-sm leading-relaxed text-muted">{text}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Email fallback */}
+            <div className="mt-8 border-t border-[rgba(148,163,184,0.06)] pt-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">
+                Prefer email?
+              </p>
+              <a
+                href={`mailto:${MAILTO_RECIPIENTS}`}
+                className="inline-flex max-w-full cursor-pointer items-start gap-2 text-sm font-medium text-accent transition hover:text-accent-bright sm:items-center"
+              >
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 sm:mt-0" />
+                <span className="flex min-w-0 flex-col gap-1 break-all">
+                  {BOT_TEAM_EMAILS.map((address) => (
+                    <span key={address}>{address}</span>
+                  ))}
+                </span>
+              </a>
+              <p className="mt-2 text-xs text-muted-foreground">
+                We respond to every inquiry — usually within 2 business days.
+              </p>
+            </div>
           </Reveal>
 
           <Reveal delay={1} variant="blurUp">
@@ -119,11 +148,16 @@ export function ContactSection() {
                     transition={{ duration: 0.4, ease: EASE.out }}
                     className="space-y-4 py-4 text-center"
                   >
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(74,222,128,0.1)] text-[rgba(74,222,128,0.85)]">
+                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
                     <p className="font-display text-xl font-semibold text-foreground">
-                      Thanks — we got your request.
+                      Application received!
                     </p>
                     <p className="text-sm text-muted">
-                      The team was notified by email. We typically reply within a few business days.
+                      We'll review your request and get back to you within 2 business days. Check your inbox.
                     </p>
                     <Button
                       type="button"
@@ -131,7 +165,7 @@ export function ContactSection() {
                       className="cursor-pointer rounded-xl"
                       onClick={() => setFormStatus("idle")}
                     >
-                      Send another request
+                      Submit another request
                     </Button>
                   </motion.div>
                 ) : (
@@ -152,9 +186,9 @@ export function ContactSection() {
                       aria-hidden
                     />
                     {[
-                      { id: "org", label: "Organization", name: "org" },
+                      { id: "org", label: "Organization name", name: "org" },
                       { id: "contact", label: "Your name", name: "contact" },
-                      { id: "email", label: "Email", name: "email", type: "email" },
+                      { id: "email", label: "Email address", name: "email", type: "email" },
                     ].map((field) => (
                       <div key={field.id} className="relative">
                         <Input
@@ -188,7 +222,7 @@ export function ContactSection() {
                         className="flex h-12 w-full cursor-pointer rounded-xl border border-input bg-[rgba(3,3,6,0.5)] px-3.5 py-2 text-base text-foreground transition focus:border-border-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(129,140,248,0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-11 sm:text-sm"
                       >
                         <option value="" disabled>
-                          Select…
+                          Select one…
                         </option>
                         {ORG_TYPE_OPTIONS.map((o) => (
                           <option key={o} value={o}>
@@ -209,7 +243,7 @@ export function ContactSection() {
                         htmlFor="message"
                         className="pointer-events-none absolute left-3.5 top-5 text-sm text-muted transition-all duration-200 peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:font-medium peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-accent-bright peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider"
                       >
-                        Project details
+                        Tell us about your org and what you need
                       </label>
                     </div>
                     {formError ? <p className="text-sm text-red-400">{formError}</p> : null}
@@ -220,9 +254,12 @@ export function ContactSection() {
                       disabled={formStatus === "sending"}
                       className="h-12 sm:h-11"
                     >
-                      {formStatus === "sending" ? "Sending…" : "Send request"}
+                      {formStatus === "sending" ? "Sending…" : "Submit application"}
                       {formStatus !== "sending" ? <ArrowRight className="h-4 w-4" /> : null}
                     </MagneticButton>
+                    <p className="text-center text-[11px] text-[rgba(148,163,184,0.4)]">
+                      Free · No commitment · We respond within 2 business days
+                    </p>
                   </motion.form>
                 )}
               </AnimatePresence>

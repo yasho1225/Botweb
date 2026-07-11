@@ -2,6 +2,7 @@
 
 import { Navbar } from "@/components/nav/navbar";
 import { ContactSection } from "@/components/sections/contact-section";
+import { FaqSection } from "@/components/sections/faq-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { MarqueeStrip } from "@/components/sections/marquee-strip";
 import { ProcessSection } from "@/components/sections/process-section";
@@ -34,6 +35,7 @@ export function BotWebHome() {
           <WhatSection />
           <ProcessSection />
           <StatementSection />
+          <FaqSection />
           <ContactSection />
         </div>
       </main>
