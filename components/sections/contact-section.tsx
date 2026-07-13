@@ -157,7 +157,7 @@ export function ContactSection() {
                       Application received!
                     </p>
                     <p className="text-sm text-muted">
-                      We'll review your request and get back to you within 2 business days. Check your inbox.
+                      We&apos;ll review your request and get back to you within 2 business days. Check your inbox.
                     </p>
                     <Button
                       type="button"

@@ -77,7 +77,7 @@ export function StatementSection() {
             className="mx-auto mt-8 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
           >
             The organizations doing the most important work in your community
-            often have the least resources to represent it. We're here to
+            often have the least resources to represent it. We&apos;re here to
             close that gap — one site at a time.
           </motion.p>
 
@@ -94,7 +94,7 @@ export function StatementSection() {
               strength={0.28}
               className="px-8 py-3.5 text-sm"
             >
-              Get started — it's free
+              Get started — it&apos;s free
               <ArrowRight className="h-4 w-4" />
             </MagneticButton>
           </motion.div>
