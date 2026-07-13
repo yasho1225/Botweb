@@ -17,8 +17,15 @@ export function CustomCursor() {
   const [hovering, setHovering] = useState(false);
   const [clicking, setClicking] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    // Touch tablets can hit md: widths — only run for true mouse/trackpad input
+    setEnabled(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const move = (e: MouseEvent) => { mx.set(e.clientX); my.set(e.clientY); };
     const down = () => setClicking(true);
     const up = () => setClicking(false);
@@ -44,7 +51,9 @@ export function CustomCursor() {
       document.removeEventListener("mouseleave", leave);
       document.removeEventListener("mouseenter", enter);
     };
-  }, [mx, my]);
+  }, [enabled, mx, my]);
+
+  if (!enabled) return null;
 
   return (
     <>

@@ -1,6 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from "framer-motion";
 import { Menu, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -10,32 +16,37 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { label: "Why", href: "#why", id: "why" },
-  { label: "What we build", href: "#what", id: "what" },
   { label: "How it works", href: "#process", id: "process" },
+  { label: "FAQ", href: "#faq", id: "faq" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
+
+  // Hide on scroll down, reveal on scroll up
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(latest > 24);
+    if (reduced || menuOpen) {
+      setHidden(false);
+      return;
+    }
+    if (latest > prev && latest > 160) setHidden(true);
+    else setHidden(false);
+  });
 
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 16);
-    }
     function onHashChange() {
       setMenuOpen(false);
     }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("hashchange", onHashChange);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("hashchange", onHashChange);
-    };
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
   useEffect(() => {
@@ -68,17 +79,28 @@ export function Navbar() {
   return (
     <>
       <motion.header
-        initial={reduced ? false : { y: -16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: EASE.out }}
+        initial={reduced ? false : { y: -20, opacity: 0 }}
+        animate={{
+          y: hidden ? "-130%" : 0,
+          opacity: 1,
+        }}
+        transition={
+          reduced
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 380, damping: 34 }
+        }
         className="fixed inset-x-0 top-0 z-50 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6"
       >
-        <div
+        {/* Morphing island: wide + transparent at top → compact glass pill on scroll */}
+        <motion.div
+          animate={reduced ? undefined : { maxWidth: scrolled ? 860 : 1024 }}
+          transition={{ type: "spring", stiffness: 260, damping: 30 }}
+          style={reduced ? { maxWidth: 1024 } : undefined}
           className={cn(
-            "relative mx-auto flex max-w-5xl items-center justify-between gap-4 overflow-hidden rounded-xl px-4 py-3 transition-all duration-300 sm:px-5",
+            "relative mx-auto flex items-center justify-between gap-4 overflow-hidden rounded-2xl px-4 transition-[background-color,border-color,box-shadow,padding] duration-300 sm:px-5",
             scrolled
-              ? "glass-panel shadow-card"
-              : "bg-transparent",
+              ? "glass-panel py-2.5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.7),0_0_0_1px_rgba(129,140,248,0.12)]"
+              : "border border-transparent bg-transparent py-3",
           )}
         >
           {/* Scroll progress bar */}
@@ -89,9 +111,13 @@ export function Navbar() {
           />
 
           <Link href="/" className="group flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-violet shadow-glow transition-shadow duration-300 group-hover:shadow-glow-lg">
+            <motion.span
+              whileHover={reduced ? undefined : { rotate: -8, scale: 1.06 }}
+              transition={{ type: "spring", stiffness: 400, damping: 18 }}
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-violet shadow-glow transition-shadow duration-300 group-hover:shadow-glow-lg"
+            >
               <Sparkles className="h-4 w-4 text-white" />
-            </span>
+            </motion.span>
             <span className="font-display text-xl tracking-tight text-foreground">BotWeb</span>
           </Link>
 
@@ -116,14 +142,6 @@ export function Navbar() {
                     />
                   )}
                   <span className="relative">{item.label}</span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-gradient-to-r from-accent to-violet"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      aria-hidden
-                    />
-                  )}
                 </Link>
               );
             })}
@@ -137,7 +155,7 @@ export function Navbar() {
               strength={0.22}
               className="hidden px-4 py-2 text-sm sm:inline-flex"
             >
-              Request a site
+              Get a free site
             </MagneticButton>
             <button
               type="button"
@@ -171,61 +189,74 @@ export function Navbar() {
               </AnimatePresence>
             </button>
           </div>
-        </div>
+        </motion.div>
       </motion.header>
 
+      {/* Full-screen mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[rgba(3,3,6,0.9)] backdrop-blur-md md:hidden"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-40 flex flex-col bg-[rgba(3,3,6,0.96)] backdrop-blur-xl md:hidden"
             onClick={() => setMenuOpen(false)}
           >
-            <motion.nav
-              initial={{ opacity: 0, y: -16, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -16, scale: 0.97 }}
-              transition={{ duration: 0.28, ease: EASE.out }}
-              className="mx-4 mt-[calc(4.5rem+env(safe-area-inset-top))] overflow-hidden rounded-xl border border-glass-border glass-panel p-3 shadow-card"
+            {/* Ambient glow */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-0 h-[40vh] w-[80vw] -translate-x-1/2 rounded-full bg-[rgba(99,102,241,0.1)] blur-[100px]"
+              aria-hidden
+            />
+
+            <nav
+              className="relative mt-[calc(6rem+env(safe-area-inset-top))] flex flex-1 flex-col px-8"
               onClick={(e) => e.stopPropagation()}
               aria-label="Mobile"
             >
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2">
                 {nav.map((item, i) => (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.04 * i, duration: 0.22, ease: EASE.out }}
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex min-h-[48px] cursor-pointer items-center rounded-lg px-4 text-base font-medium text-foreground transition-colors hover:bg-accent-soft hover:text-accent-bright"
-                      onClick={() => setMenuOpen(false)}
+                  <div key={item.href} className="overflow-hidden">
+                    <motion.div
+                      initial={{ y: "100%", opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: "100%", opacity: 0 }}
+                      transition={{ delay: 0.05 * i, duration: 0.4, ease: EASE.out }}
                     >
-                      {item.label}
-                    </Link>
-                  </motion.div>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-4 py-3 font-display text-3xl font-bold tracking-tight text-foreground transition-colors hover:text-accent-bright"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <span className="font-mono text-xs font-medium text-[rgba(129,140,248,0.5)]">
+                          0{i + 1}
+                        </span>
+                        {item.label}
+                      </Link>
+                    </motion.div>
+                  </div>
                 ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.25, ease: EASE.out }}
-                  className="mt-2 border-t border-[rgba(148,163,184,0.05)] pt-2"
-                >
-                  <Link
-                    href="#contact"
-                    className="flex min-h-[48px] cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-accent to-violet text-base font-semibold text-white shadow-glow"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Request a site
-                  </Link>
-                </motion.div>
               </div>
-            </motion.nav>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.28, duration: 0.35, ease: EASE.out }}
+                className="mt-10"
+              >
+                <Link
+                  href="#contact"
+                  className="btn-sheen flex min-h-[54px] cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent to-violet text-base font-semibold text-white shadow-glow"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get a free site
+                </Link>
+                <p className="mt-4 text-center text-xs text-[rgba(148,163,184,0.4)]">
+                  Free for nonprofits · Built by student volunteers
+                </p>
+              </motion.div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>

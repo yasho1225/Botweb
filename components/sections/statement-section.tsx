@@ -16,7 +16,7 @@ export function StatementSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden py-28 sm:py-36 lg:py-44"
+      className="relative overflow-hidden py-20 sm:py-28 lg:py-36"
     >
       {/* Full-bleed gradient wash */}
       <div

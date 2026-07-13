@@ -9,31 +9,24 @@ const EASE_SPRING = [0.22, 1, 0.36, 1] as const;
 const cards = [
   {
     n: "01",
-    title: "Professional quality",
-    text: "Design and code built like a real product — not a class project. We sweat the details so your org looks world-class.",
+    title: "Professional quality, zero cost",
+    text: "Design and code built like a real product — not a class project. Your org gets something it could never afford, completely free.",
     spotlight: "rgba(129,140,248,0.11)",
     wide: true,
   },
   {
     n: "02",
     title: "AI chatbot included",
-    text: "Help visitors find answers and resources, even when your team is offline. Every site ships with a custom AI assistant.",
+    text: "Every site ships with a custom AI assistant that answers questions and guides visitors 24/7 — no extra staff needed.",
     spotlight: "rgba(167,139,250,0.11)",
     wide: false,
   },
   {
     n: "03",
-    title: "You're in the loop",
-    text: "Real collaboration from kickoff to launch — clear updates, direct communication, no black box.",
+    title: "Yours to keep",
+    text: "Full ownership at launch — all assets, accounts, and training handed over so your team can run it independently.",
     spotlight: "rgba(129,140,248,0.09)",
     wide: false,
-  },
-  {
-    n: "04",
-    title: "Focused capacity",
-    text: "We take on a limited number of projects at a time so every organization gets genuine attention and care.",
-    spotlight: "rgba(99,102,241,0.09)",
-    wide: true,
   },
 ] as const;
 
@@ -130,26 +123,21 @@ export function WhySection() {
           </motion.p>
         </div>
 
-        {/* Bento grid: 1 col → 2 col (sm) → 3 col (lg) with wide cards spanning 2 */}
+        {/* Bento grid: 1 col → 3 col (lg). Card 01 spans full width on sm, 2 cols on lg. */}
         <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {/* 01 — wide */}
           <div className="sm:col-span-2 lg:col-span-2">
             <BentoCard card={cards[0]} delay={0.05} />
           </div>
 
-          {/* 02 — single */}
-          <div className="sm:col-span-1 lg:col-span-1">
+          {/* 02 — single, right column, spans 2 rows visually */}
+          <div className="sm:col-span-1 sm:row-span-2 lg:col-span-1">
             <BentoCard card={cards[1]} delay={0.12} />
           </div>
 
-          {/* 03 — single */}
-          <div className="sm:col-span-1 lg:col-span-1">
+          {/* 03 — fills remaining left area */}
+          <div className="sm:col-span-1 lg:col-span-2">
             <BentoCard card={cards[2]} delay={0.18} />
-          </div>
-
-          {/* 04 — wide */}
-          <div className="sm:col-span-2 lg:col-span-2">
-            <BentoCard card={cards[3]} delay={0.25} />
           </div>
         </div>
       </div>

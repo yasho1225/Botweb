@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 
 const WORDS = [
-  "Free for nonprofits",
-  "Student-built",
-  "AI-powered",
-  "Professional quality",
-  "Community-first",
-  "No templates",
-  "Real collaboration",
-  "Zero cost",
+  "Custom websites",
+  "AI chatbot included",
+  "6–8 week launch",
+  "No fees, ever",
+  "Full ownership at launch",
+  "Student volunteers",
+  "Mobile-first design",
+  "Real support after launch",
 ];
 
 function InnerTrack({ speed = 35 }: { speed?: number }) {

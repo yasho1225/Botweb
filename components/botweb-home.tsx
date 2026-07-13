@@ -8,9 +8,6 @@ import { MarqueeStrip } from "@/components/sections/marquee-strip";
 import { ProcessSection } from "@/components/sections/process-section";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { StatementSection } from "@/components/sections/statement-section";
-import { StatsSection } from "@/components/sections/stats-section";
-import { TrustStrip } from "@/components/sections/trust-strip";
-import { WhatSection } from "@/components/sections/what-section";
 import { WhySection } from "@/components/sections/why-section";
 import { CustomCursor } from "@/components/ui/cursor";
 import { SiteBackground } from "@/components/ui/site-chrome";
@@ -29,10 +26,7 @@ export function BotWebHome() {
         <MarqueeStrip />
         {/* Semi-opaque panel below hero: lets aurora bleed through subtly, hides 3D objects */}
         <div className="relative bg-[rgba(3,3,6,0.82)]">
-          <TrustStrip />
           <WhySection />
-          <StatsSection />
-          <WhatSection />
           <ProcessSection />
           <StatementSection />
           <FaqSection />
