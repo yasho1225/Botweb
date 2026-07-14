@@ -9,7 +9,6 @@ import { ProcessSection } from "@/components/sections/process-section";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { StatementSection } from "@/components/sections/statement-section";
 import { WhySection } from "@/components/sections/why-section";
-import { CustomCursor } from "@/components/ui/cursor";
 import { SiteBackground } from "@/components/ui/site-chrome";
 
 export function BotWebHome() {
@@ -17,7 +16,6 @@ export function BotWebHome() {
     // bg-background intentionally removed from this wrapper — it blocks the
     // fixed 3D canvas (z:-10) and aurora (z:-20). Body provides the base color.
     <div className="relative min-h-screen text-foreground">
-      <CustomCursor />
       <SiteBackground />
       <Navbar />
 

@@ -10,7 +10,6 @@ import {
 import { Menu, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MagneticButton } from "@/components/ui/premium-primitives";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -148,15 +147,12 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <MagneticButton
-              as="a"
+            <a
               href="#contact"
-              variant="gradient"
-              strength={0.22}
-              className="hidden px-4 py-2 text-sm sm:inline-flex"
+              className="hidden cursor-pointer items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#030306] transition-all duration-200 hover:brightness-90 active:scale-[0.98] sm:inline-flex"
             >
               Get a free site
-            </MagneticButton>
+            </a>
             <button
               type="button"
               className="inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg border border-border bg-card-solid/80 p-2 text-foreground backdrop-blur-sm transition-colors hover:border-border-bright md:hidden"
@@ -247,7 +243,7 @@ export function Navbar() {
               >
                 <Link
                   href="#contact"
-                  className="btn-sheen flex min-h-[54px] cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent to-violet text-base font-semibold text-white shadow-glow"
+                  className="flex min-h-[54px] cursor-pointer items-center justify-center gap-2 rounded-2xl bg-white text-base font-semibold text-[#030306] transition-all duration-200 active:scale-[0.98]"
                   onClick={() => setMenuOpen(false)}
                 >
                   Get a free site
