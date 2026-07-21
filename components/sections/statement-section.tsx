@@ -1,87 +1,72 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
-import { MagneticButton } from "@/components/ui/premium-primitives";
 import { EASE } from "@/lib/motion";
-
-const STATEMENT = "Great work deserves to be seen.";
-const words = STATEMENT.split(" ");
 
 export function StatementSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
+  const reduced = !!useReducedMotion();
 
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden border-y border-[rgba(148,163,184,0.08)] py-20 sm:py-28 lg:py-36"
+      className="relative overflow-hidden border-y border-[rgba(148,163,184,0.08)] bg-black py-20 sm:py-28 lg:py-32"
     >
       <div className="container">
-        <div className="mx-auto max-w-5xl text-center">
-          {/* Section marker */}
+        <div className="mx-auto max-w-3xl text-center">
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, ease: EASE.out }}
-            className="mb-10 font-mono text-xs font-medium uppercase tracking-[0.25em] text-[rgba(129,140,248,0.7)]"
+            initial={reduced ? false : { opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : reduced ? { opacity: 1 } : undefined}
+            transition={{ duration: 0.45, ease: EASE.out }}
+            className="mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent sm:mb-8"
           >
             Our belief
           </motion.p>
 
-          {/* Word-by-word reveal */}
-          <h2
-            className="font-display text-[clamp(2.4rem,6.5vw,5.5rem)] font-bold leading-[1.05] tracking-tight"
-            aria-label={STATEMENT}
+          <motion.h2
+            initial={reduced ? false : { opacity: 0, y: 24, filter: "blur(8px)" }}
+            animate={
+              inView
+                ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                : reduced
+                  ? { opacity: 1 }
+                  : undefined
+            }
+            transition={{ duration: 0.65, delay: 0.06, ease: EASE.out }}
+            className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.25rem)] font-normal leading-[1.12] tracking-tight text-foreground"
           >
-            {words.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden">
-                <motion.span
-                  initial={{ y: "105%", opacity: 0 }}
-                  animate={inView ? { y: "0%", opacity: 1 } : {}}
-                  transition={{
-                    duration: 0.65,
-                    delay: 0.1 + i * 0.08,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className={`inline-block ${
-                    i >= 3 ? "text-accent" : "text-foreground"
-                  } mr-[0.28em]`}
-                >
-                  {word}
-                </motion.span>
-              </span>
-            ))}
-          </h2>
+            Great work deserves
+            <br />
+            to be <span className="text-accent">seen.</span>
+          </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.7, ease: EASE.out }}
-            className="mx-auto mt-8 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
+            initial={reduced ? false : { opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : reduced ? { opacity: 1 } : undefined}
+            transition={{ duration: 0.55, delay: 0.18, ease: EASE.out }}
+            className="mx-auto mt-6 max-w-lg text-pretty text-base leading-relaxed text-muted sm:mt-8 sm:text-lg"
           >
-            The organizations doing the most important work in your community
-            often have the least resources to represent it. We&apos;re here to
-            close that gap — one site at a time.
+            Missions that matter deserve a clear online home. We help nonprofits
+            and clubs show up with the same care they bring to their work —
+            free, always.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.9, ease: EASE.out }}
-            className="mt-10"
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : reduced ? { opacity: 1 } : undefined}
+            transition={{ duration: 0.5, delay: 0.28, ease: EASE.out }}
+            className="mt-9 sm:mt-10"
           >
-            <MagneticButton
-              as="a"
+            <a
               href="#contact"
-              variant="gradient"
-              strength={0.28}
-              className="px-8 py-3.5 text-sm"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-white shadow-glow transition hover:brightness-110 active:scale-[0.98]"
             >
-              Get started — it&apos;s free
-              <ArrowRight className="h-4 w-4" />
-            </MagneticButton>
+              Request a free site
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </a>
           </motion.div>
         </div>
       </div>

@@ -14,7 +14,7 @@ const cards: {
   {
     n: "01",
     title: "Professional quality, zero cost",
-    text: "Design and code built like a real product — not a class project. Your org gets something it could never afford, completely free.",
+    text: "Design and code built like a real product — not a class project. Professional quality, delivered completely free.",
     icon: BadgeCheck,
     spotlight: "rgba(129,140,248,0.11)",
   },
