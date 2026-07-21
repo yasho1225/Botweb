@@ -16,23 +16,8 @@ export function StatementSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden py-20 sm:py-28 lg:py-36"
+      className="relative overflow-hidden border-y border-[rgba(148,163,184,0.08)] py-20 sm:py-28 lg:py-36"
     >
-      {/* Full-bleed gradient wash */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(129,140,248,0.04)] to-transparent"
-        aria-hidden
-      />
-      {/* Horizontal rules */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(129,140,248,0.3)] to-transparent" aria-hidden />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[rgba(167,139,250,0.25)] to-transparent" aria-hidden />
-
-      {/* Key light */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(129,140,248,0.06)] blur-[130px]"
-        aria-hidden
-      />
-
       <div className="container">
         <div className="mx-auto max-w-5xl text-center">
           {/* Section marker */}
@@ -61,7 +46,7 @@ export function StatementSection() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                   className={`inline-block ${
-                    i >= 3 ? "gradient-text" : "text-foreground"
+                    i >= 3 ? "text-accent" : "text-foreground"
                   } mr-[0.28em]`}
                 >
                   {word}

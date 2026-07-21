@@ -1,34 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, Inter_Tight } from "next/font/google";
+import { DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
   display: "swap",
 });
 
-const interTight = Inter_Tight({
+const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  weight: "400",
   variable: "--font-dm",
   display: "swap",
 });
 
-// Editorial accent face — used sparingly (one word at a time)
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-// Set NEXT_PUBLIC_SITE_URL in production so canonical/OG URLs resolve correctly
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const SITE_NAME = "BotWeb";
-const TITLE = "BotWeb — Free Websites for Local Nonprofits";
+const TITLE = "BotWeb — Free Websites for Nonprofits & Clubs";
 const DESCRIPTION =
   "Student volunteers building professional websites and AI chatbots for local nonprofits, school clubs, and community organizations — completely free.";
 
@@ -79,7 +69,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#030306",
+  themeColor: "#000000",
 };
 
 const organizationJsonLd = {
@@ -96,10 +86,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`dark ${inter.variable} ${interTight.variable} ${instrumentSerif.variable}`}
-    >
+    <html lang="en" className={`dark ${jakarta.variable} ${dmSerif.variable}`}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {children}
         <script

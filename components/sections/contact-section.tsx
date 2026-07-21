@@ -12,9 +12,9 @@ import { BOT_TEAM_EMAILS, MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS } from "@/lib/cont
 import { EASE } from "@/lib/motion";
 
 const NEXT_STEPS = [
-  { n: "01", text: "We review your application (1–2 business days)" },
+  { n: "01", text: "We reply within 1–2 business days" },
   { n: "02", text: "A quick intro call to align on your goals and scope" },
-  { n: "03", text: "Design, build, and launch in 6–8 weeks" },
+  { n: "03", text: "Design, build, and launch in 1–2 weeks" },
 ] as const;
 
 export function ContactSection() {
@@ -89,13 +89,13 @@ export function ContactSection() {
       <div className="container">
         <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:gap-16">
           <Reveal variant="blurUp">
-            <span className="section-label mb-4">Apply</span>
+            <span className="section-label mb-4">Get in touch</span>
             <h2 className="font-display text-balance text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Apply for your free site
+              Request your free site
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-              Tell us about your organization. We review every request and reply within 2 business
-              days.{" "}
+              Tell us about your organization. We reply within 2 business days —
+              no application process.{" "}
               <span className="font-medium text-foreground">No pitch. No fees. Ever.</span>
             </p>
 
@@ -104,13 +104,20 @@ export function ContactSection() {
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
                 What happens next
               </p>
-              {NEXT_STEPS.map(({ n, text }) => (
-                <div key={n} className="flex items-start gap-3">
+              {NEXT_STEPS.map(({ n, text }, i) => (
+                <motion.div
+                  key={n}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.45, delay: 0.08 * i, ease: EASE.out }}
+                  className="flex items-start gap-3"
+                >
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-[11px] font-semibold text-accent">
                     {n}
                   </span>
                   <p className="text-sm leading-relaxed text-muted">{text}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -154,10 +161,10 @@ export function ContactSection() {
                       </svg>
                     </div>
                     <p className="font-display text-xl font-semibold text-foreground">
-                      Application received!
+                      Request received!
                     </p>
                     <p className="text-sm text-muted">
-                      We&apos;ll review your request and get back to you within 2 business days. Check your inbox.
+                      We&apos;ll get back to you within 2 business days. Check your inbox.
                     </p>
                     <Button
                       type="button"
@@ -254,7 +261,7 @@ export function ContactSection() {
                       disabled={formStatus === "sending"}
                       className="h-12 sm:h-11"
                     >
-                      {formStatus === "sending" ? "Sending…" : "Submit application"}
+                      {formStatus === "sending" ? "Sending…" : "Send request"}
                       {formStatus !== "sending" ? <ArrowRight className="h-4 w-4" /> : null}
                     </MagneticButton>
                     <p className="text-center text-[11px] text-[rgba(148,163,184,0.4)]">

@@ -75,7 +75,7 @@ export function ProcessSection() {
   return (
     <section
       id="process"
-      className="scroll-mt-[calc(5.5rem+env(safe-area-inset-top,0px))] border-t border-[rgba(148,163,184,0.05)] py-20 sm:py-28"
+      className="scroll-mt-[calc(5.5rem+env(safe-area-inset-top,0px))] border-t border-border py-12 sm:scroll-mt-24 sm:py-14 md:py-20"
     >
       <div className="container">
         <Reveal variant="blurUp">
@@ -142,16 +142,20 @@ export function ProcessSection() {
                           : "lg:ml-[calc(50%+2rem)]",
                       )}
                     >
-                      <GlassCard className="p-6 sm:p-7">
+                      <GlassCard className="p-6 transition-transform duration-300 sm:p-7 lg:hover:-translate-y-1">
                         <div
                           className={cn(
                             "mb-4 flex items-center gap-3",
                             isLeft ? "lg:flex-row-reverse" : "",
                           )}
                         >
-                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-bright bg-accent-soft">
+                          <motion.span
+                            whileHover={reduced ? undefined : { scale: 1.06 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-bright bg-accent-soft"
+                          >
                             <Icon className="h-5 w-5 text-accent" />
-                          </span>
+                          </motion.span>
                           <span className="font-mono text-sm font-medium text-accent">
                             {step.n}
                           </span>

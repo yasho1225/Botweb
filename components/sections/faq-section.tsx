@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "How long does the process take?",
-    a: "Most projects go from first contact to a live site in 6–8 weeks. We'll give you a specific timeline estimate after our intro call, based on your project's scope and our current capacity.",
+    a: "Most projects go from first contact to a live site in 1–2 weeks. We'll give you a specific timeline after our intro call, based on your project's scope and our current capacity.",
   },
   {
     q: "Who owns the website after it's built?",
@@ -94,12 +94,17 @@ function FaqItem({
             initial={reduced ? false : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.32, ease: EASE.out }}
+            transition={{ duration: 0.36, ease: EASE.out }}
             className="overflow-hidden"
           >
-            <p className="pb-5 pr-8 text-sm leading-relaxed text-muted sm:text-base">
+            <motion.p
+              initial={reduced ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.05, ease: EASE.out }}
+              className="pb-5 pr-8 text-sm leading-relaxed text-muted sm:text-base"
+            >
               {item.a}
-            </p>
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>

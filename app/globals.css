@@ -5,8 +5,8 @@
 
 .dark {
   color-scheme: dark;
-  --background: #030306;
-  --foreground: #f8fafc;
+  --background: #000000;
+  --foreground: #f1f5f9;
   --muted: #9aa6bd;
   --muted-foreground: #64748b;
   --accent: #818cf8;
@@ -15,13 +15,13 @@
   --accent-glow: rgba(99, 102, 241, 0.45);
   --violet: #a78bfa;
   --cyan: #22d3ee;
-  --card: rgba(10, 10, 20, 0.75);
-  --card-solid: #0a0a14;
-  --card-muted: #07070f;
-  --border: rgba(148, 163, 184, 0.1);
+  --card: rgba(10, 10, 14, 0.85);
+  --card-solid: #0a0a0a;
+  --card-muted: #000000;
+  --border: rgba(148, 163, 184, 0.12);
   --border-bright: rgba(129, 140, 248, 0.28);
-  --surface: #080812;
-  --surface-deep: #020205;
+  --surface: #000000;
+  --surface-deep: #000000;
   --elevated: #10101c;
   --glass: rgba(255, 255, 255, 0.035);
   --glass-border: rgba(255, 255, 255, 0.08);
@@ -53,17 +53,17 @@
   }
 
   h1, h2, h3, h4 {
-    font-family: var(--font-dm), var(--font-jakarta), system-ui, sans-serif;
-    letter-spacing: -0.03em;
+    font-family: var(--font-dm), Georgia, serif;
+    letter-spacing: -0.02em;
     text-rendering: optimizeLegibility;
   }
 
   h1, h2 {
-    font-weight: 700;
+    font-weight: 400;
   }
 
   h3, h4 {
-    font-weight: 600;
+    font-weight: 400;
   }
 
   a {
@@ -94,7 +94,7 @@
   ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, rgba(129, 140, 248, 0.35), rgba(167, 139, 250, 0.25));
     border-radius: 8px;
-    border: 3px solid #030306;
+    border: 3px solid #000000;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(129, 140, 248, 0.5);
@@ -103,6 +103,12 @@
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+
+    .animate-marquee,
+    .animate-aurora-drift,
+    .animate-aurora-drift-slow {
+      animation: none !important;
     }
   }
 }
@@ -118,7 +124,7 @@
 
   /* Editorial serif accent — italic, used one word at a time */
   .serif-accent {
-    font-family: var(--font-serif), Georgia, serif;
+    font-family: var(--font-dm), Georgia, serif;
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.01em;
@@ -188,16 +194,21 @@
   }
 
   .site-bg {
-    background:
-      radial-gradient(ellipse 70% 45% at 50% -8%, rgba(99, 102, 241, 0.14), transparent 55%),
-      radial-gradient(ellipse 40% 30% at 100% 20%, rgba(167, 139, 250, 0.08), transparent 50%),
-      var(--background);
+    background: var(--background);
   }
 
   .mesh-hero {
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -15%, rgba(99, 102, 241, 0.16), transparent 55%),
-      radial-gradient(ellipse 50% 35% at 0% 40%, rgba(129, 140, 248, 0.06), transparent 50%);
+    background-color: #000000;
+    background-image: none;
+  }
+
+  .grain {
+    background-image: none;
+  }
+
+  .mesh-hero.grain {
+    background-color: #000000;
+    background-image: none;
   }
 
   /* Faint dot lattice for depth on dark surfaces */

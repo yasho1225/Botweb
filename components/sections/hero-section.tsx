@@ -1,211 +1,76 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { EASE } from "@/lib/motion";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
-// Same workspace photograph the original site shipped with — carried into v2
 const HERO_PHOTO =
   "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1400&q=80";
 
-const SPECS = [
-  { label: "Nonprofits served", value: "8+" },
-  { label: "Cost to you", value: "$0" },
-  { label: "Typical launch", value: "6–8 weeks" },
-  { label: "Built by", value: "Student volunteers" },
-] as const;
-
-function up(delay: number, reduced: boolean) {
-  if (reduced) return {};
-  return {
-    initial: { opacity: 0, y: 14 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.65, delay, ease: EASE.out },
-  };
-}
-
-function Line({
-  children,
-  delay,
-  reduced,
-}: {
-  children: React.ReactNode;
-  delay: number;
-  reduced: boolean;
-}) {
-  return (
-    <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-      <motion.span
-        className="block"
-        initial={reduced ? false : { y: "108%" }}
-        animate={{ y: "0%" }}
-        transition={{ duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
-
 export function HeroSection() {
-  const reduced = !!useReducedMotion();
-
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col overflow-hidden"
+      className="relative overflow-x-hidden bg-black pt-2 sm:pt-3 md:pt-4"
       aria-label="Hero"
     >
-      {/* Asymmetric glow — top-left, barely there */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 55% 45% at 18% 8%, rgba(99,102,241,0.11), transparent 62%)",
-        }}
-        aria-hidden
-      />
+      <ContainerScroll
+        titleComponent={
+          <>
+            <span className="mb-2 inline-flex max-w-[95vw] items-center justify-center rounded-full border border-border bg-card/95 px-3 py-1.5 text-[10px] font-semibold uppercase leading-snug tracking-wider text-accent shadow-sm sm:px-4 sm:py-1 sm:text-xs">
+              Free for nonprofits & clubs
+            </span>
 
-      {/* Film grain */}
-      <div className="noise-overlay pointer-events-none absolute inset-0" aria-hidden />
-
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col px-5 pt-[calc(7rem+env(safe-area-inset-top,0px))] sm:px-6">
-        {/* ── Main block: copy left, photograph right ── */}
-        <div className="grid flex-1 content-center gap-12 pb-14 lg:grid-cols-[7fr_5fr] lg:items-center lg:gap-16">
-          <div>
-            {/* Kicker: rule + status */}
-            <motion.div
-              {...up(0.05, reduced)}
-              className="mb-8 flex items-center gap-4 sm:mb-10"
-            >
-              <span className="h-px w-10 bg-white/25 sm:w-14" aria-hidden />
-              <span className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-[rgba(148,163,184,0.6)]">
-                <span
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[rgba(74,222,128,0.85)]"
-                  aria-hidden
-                />
-                Now accepting applications
+            <h1 className="font-display text-balance text-[1.65rem] font-normal leading-[1.15] tracking-tight text-foreground min-[400px]:text-[1.85rem] sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+              We Build Websites.
+              <br />
+              <span className="mt-1.5 block text-[1.9rem] font-normal leading-[1.08] text-accent min-[400px]:text-[2.1rem] sm:text-5xl md:text-6xl lg:text-7xl">
+                You Build Impact.
               </span>
-            </motion.div>
-
-            {/* Headline — serif italic accent on one word */}
-            <h1
-              className="font-display font-bold tracking-[-0.045em] text-foreground"
-              style={{ fontSize: "clamp(2.8rem,6vw,5.1rem)", lineHeight: 1.03 }}
-            >
-              <Line delay={0.12} reduced={reduced}>
-                You build impact.
-              </Line>
-              <Line delay={0.24} reduced={reduced}>
-                <span className="text-[rgba(148,163,184,0.55)]">We build </span>
-                <span className="serif-accent font-normal tracking-[-0.01em] text-foreground">
-                  websites.
-                </span>
-              </Line>
             </h1>
 
-            {/* Subhead */}
-            <motion.p
-              {...up(0.5, reduced)}
-              className="mt-8 max-w-md text-pretty text-base leading-relaxed text-muted sm:text-lg"
-            >
-              BotWeb is a student volunteer team. We design, build, and launch
-              professional websites for nonprofits — AI chatbot included,{" "}
-              <span className="font-medium text-[rgba(248,250,252,0.78)]">
-                completely free.
-              </span>
-            </motion.p>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty px-1 text-[0.9375rem] leading-relaxed text-muted sm:mt-5 sm:px-2 sm:text-base md:text-lg">
+              Student volunteers build professional websites and AI chatbots for
+              nonprofits and school clubs — completely free.
+            </p>
 
-            {/* CTAs — labels carried from the original site */}
-            <motion.div
-              {...up(0.64, reduced)}
-              className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6"
-            >
+            <div className="mx-auto mt-7 flex w-full max-w-md flex-col items-stretch gap-3 px-1 sm:mt-8 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3 sm:px-0">
               <a
-                href="#contact"
-                className="btn-sheen inline-flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#030306] transition-all duration-200 hover:brightness-95 active:scale-[0.98] sm:min-h-0"
-              >
-                Request a free site
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </a>
-              <a
-                href="#why"
-                className="group inline-flex min-h-[52px] cursor-pointer items-center justify-center gap-1.5 text-sm font-medium text-muted transition-colors duration-200 hover:text-foreground sm:min-h-0"
+                href="#what"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-border bg-card/80 px-5 py-3 text-sm font-semibold text-foreground shadow-card backdrop-blur-sm transition hover:border-accent/40 hover:bg-card active:scale-[0.98] sm:min-h-0 sm:py-2.5"
               >
                 What we build
-                <ArrowRight
-                  className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
-                  aria-hidden
-                />
+                <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
               </a>
-            </motion.div>
-          </div>
-
-          {/* ── Photograph — editorial panel with archival caption ── */}
-          <motion.figure
-            initial={reduced ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45, ease: EASE.out }}
-            className="relative"
-          >
-            <div className="relative overflow-hidden rounded-xl border border-white/10 aspect-[16/10] lg:aspect-[4/4.6]">
-              <Image
-                src={HERO_PHOTO}
-                alt="A laptop workspace where websites are built"
-                fill
-                priority
-                sizes="(max-width: 1023px) 100vw, 40vw"
-                className="object-cover"
-                style={{ filter: "saturate(0.72) contrast(1.05)" }}
-              />
-              {/* Indigo-tinted wash so the photo sits inside the palette */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(3,3,6,0.12) 0%, rgba(3,3,6,0.5) 100%), rgba(99,102,241,0.1)",
-                }}
-                aria-hidden
-              />
+              <a
+                href="#contact"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:brightness-110 active:scale-[0.98] sm:min-h-0 sm:py-2.5"
+              >
+                Request a Site
+              </a>
             </div>
-            <figcaption className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(148,163,184,0.4)]">
-              <span>Fig. 01</span>
-              <span>Hand-built, not templated</span>
-            </figcaption>
-          </motion.figure>
-        </div>
 
-        {/* ── Spec sheet — pinned to the bottom of the hero ── */}
-        <motion.dl
-          {...up(0.85, reduced)}
-          className="grid grid-cols-2 border-t border-white/10 md:grid-cols-4"
-          aria-label="Key facts"
-        >
-          {SPECS.map(({ label, value }, i) => (
-            <div
-              key={label}
-              className={`flex flex-col gap-1.5 py-6 pr-4 ${
-                i % 2 === 1 ? "border-l border-white/10 pl-5" : ""
-              } ${
-                i === 2 ? "border-t border-white/10 md:border-t-0 md:border-l md:pl-5" : ""
-              } ${i === 3 ? "border-t border-white/10 md:border-t-0" : ""}`}
-            >
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(148,163,184,0.4)]">
-                {label}
-              </dt>
-              <dd className="font-display text-lg font-semibold tracking-tight text-foreground sm:text-xl">
-                {value}
-              </dd>
+            <div className="mx-auto mt-6 flex flex-wrap justify-center gap-2 sm:mt-8">
+              <span className="rounded-full border border-border bg-card/90 px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm sm:px-4 sm:text-xs">
+                100% free
+              </span>
+              <span className="rounded-full border border-border bg-card/90 px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm sm:px-4 sm:text-xs">
+                Student-run
+              </span>
             </div>
-          ))}
-        </motion.dl>
-      </div>
-
-      {/* Fade into next section */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#030306] to-transparent"
-        aria-hidden
-      />
+          </>
+        }
+      >
+        <Image
+          src={HERO_PHOTO}
+          alt="Laptop on a workspace — free web design for nonprofits"
+          height={720}
+          width={1400}
+          priority
+          sizes="(max-width: 768px) 100vw, 1024px"
+          className="mx-auto h-full rounded-2xl object-cover object-left-top"
+          draggable={false}
+        />
+      </ContainerScroll>
     </section>
   );
 }

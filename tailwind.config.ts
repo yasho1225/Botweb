@@ -56,7 +56,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
-        display: ["var(--font-dm)", "var(--font-jakarta)", "system-ui", "sans-serif"],
+        display: ["var(--font-dm)", "Georgia", "serif"],
       },
       boxShadow: {
         soft: "0 20px 50px -12px rgba(0, 0, 0, 0.45)",
@@ -89,6 +89,10 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-8px)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "aurora-drift": "aurora-drift 18s ease-in-out infinite",
@@ -96,6 +100,7 @@ const config: Config = {
         shimmer: "shimmer 2.5s linear infinite",
         "pulse-dot": "pulse-dot 2.2s ease-in-out infinite",
         "float-y": "float-y 5s ease-in-out infinite",
+        marquee: "marquee 22s linear infinite",
       },
     },
   },

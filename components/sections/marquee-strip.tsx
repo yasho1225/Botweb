@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 
 const WORDS = [
   "Custom websites",
   "AI chatbot included",
-  "6–8 week launch",
+  "1–2 week launch",
   "No fees, ever",
   "Full ownership at launch",
   "Student volunteers",
@@ -13,37 +13,59 @@ const WORDS = [
   "Real support after launch",
 ];
 
-function InnerTrack({ speed = 35 }: { speed?: number }) {
-  const items = [...WORDS, ...WORDS];
+function Track() {
   return (
-    <motion.div
-      className="flex shrink-0 items-center gap-0 whitespace-nowrap"
-      animate={{ x: ["0%", "-50%"] }}
-      transition={{ duration: speed, ease: "linear", repeat: Infinity }}
-    >
-      {items.map((word, i) => (
-        <span key={i} className="inline-flex items-center">
-          <span className="px-7 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgba(154,166,189,0.8)] transition-colors hover:text-accent">
+    <div className="flex shrink-0 items-center whitespace-nowrap">
+      {WORDS.map((word, i) => (
+        <span key={`${word}-${i}`} className="inline-flex items-center">
+          <span className="cursor-pointer px-7 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgba(154,166,189,0.8)] transition-colors duration-200 hover:text-accent-bright sm:text-xs">
             {word}
           </span>
-          <span className="h-[3px] w-[3px] shrink-0 rounded-full bg-[rgba(129,140,248,0.4)]" aria-hidden />
+          <span
+            className="h-[3px] w-[3px] shrink-0 rounded-full bg-[rgba(129,140,248,0.4)]"
+            aria-hidden
+          />
         </span>
       ))}
-    </motion.div>
+    </div>
   );
 }
 
 export function MarqueeStrip() {
-  return (
-    <div className="relative overflow-hidden border-y border-[rgba(148,163,184,0.12)] py-3.5 bg-[rgba(3,3,6,0.6)]">
-      {/* Left fade */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-[rgb(3,3,6)] to-transparent" />
-      {/* Right fade */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-[rgb(3,3,6)] to-transparent" />
+  const reduced = !!useReducedMotion();
 
-      <div className="flex overflow-hidden">
-        <InnerTrack speed={40} />
-        <InnerTrack speed={40} />
+  return (
+    <div className="-mt-1 border-y border-[rgba(148,163,184,0.12)] bg-black">
+      <div className="relative overflow-hidden py-3.5 sm:py-4">
+        {reduced ? (
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 px-4">
+            {WORDS.slice(0, 4).map((word) => (
+              <span
+                key={word}
+                className="cursor-pointer font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgba(154,166,189,0.8)] transition-colors duration-200 hover:text-accent-bright sm:text-xs"
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div
+              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-black to-transparent sm:w-24"
+              aria-hidden
+            />
+            <div
+              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-black to-transparent sm:w-24"
+              aria-hidden
+            />
+            {/* Duplicate tracks = seamless infinite loop */}
+            <div className="flex w-max animate-marquee will-change-transform hover:[animation-play-state:paused]">
+              <Track />
+              <Track />
+            </div>
+            <span className="sr-only">{WORDS.join(". ")}</span>
+          </>
+        )}
       </div>
     </div>
   );
