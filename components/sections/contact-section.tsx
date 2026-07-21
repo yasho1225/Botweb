@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GlassCard, MagneticButton } from "@/components/ui/premium-primitives";
 import { Textarea } from "@/components/ui/textarea";
-import { BOT_TEAM_EMAILS, MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS } from "@/lib/contact";
+import {
+  BOT_TEAM_EMAILS,
+  FORMSPREE_NOTIFY_EMAIL,
+  MAILTO_RECIPIENTS,
+  ORG_TYPE_OPTIONS,
+} from "@/lib/contact";
 import { EASE } from "@/lib/motion";
 
 const NEXT_STEPS = [
@@ -44,8 +49,11 @@ export function ContactSection() {
     try {
       const fd = new FormData(form);
       const org = String(fd.get("org") ?? "").trim();
-      fd.append("_subject", `BotWeb project request: ${org}`);
-      fd.append("_replyto", String(fd.get("email") ?? ""));
+      const replyEmail = String(fd.get("email") ?? "").trim();
+      fd.set("_subject", `BotWeb project request: ${org}`);
+      fd.set("_replyto", replyEmail);
+      // Ensure submissions CC the BotWeb inbox (Formspree must allow this address)
+      fd.set("_cc", FORMSPREE_NOTIFY_EMAIL);
       const res = await fetch(formspreeUrl, {
         method: "POST",
         body: fd,
@@ -53,6 +61,8 @@ export function ContactSection() {
       });
       const data = (await res.json().catch(() => ({}))) as {
         error?: string;
+        next?: string;
+        ok?: boolean;
         errors?: Record<string, string | string[]>;
       };
       if (!res.ok) {
@@ -192,6 +202,7 @@ export function ContactSection() {
                       className="pointer-events-none absolute left-0 top-0 h-0 w-0 opacity-0"
                       aria-hidden
                     />
+                    <input type="hidden" name="_cc" value={FORMSPREE_NOTIFY_EMAIL} />
                     {[
                       { id: "org", label: "Organization name", name: "org" },
                       { id: "contact", label: "Your name", name: "contact" },
