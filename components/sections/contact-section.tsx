@@ -8,12 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GlassCard, MagneticButton } from "@/components/ui/premium-primitives";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  BOT_TEAM_EMAILS,
-  FORMSPREE_NOTIFY_EMAIL,
-  MAILTO_RECIPIENTS,
-  ORG_TYPE_OPTIONS,
-} from "@/lib/contact";
+import { BOT_TEAM_EMAILS, MAILTO_RECIPIENTS, ORG_TYPE_OPTIONS } from "@/lib/contact";
 import { EASE } from "@/lib/motion";
 
 const NEXT_STEPS = [
@@ -52,8 +47,8 @@ export function ContactSection() {
       const replyEmail = String(fd.get("email") ?? "").trim();
       fd.set("_subject", `BotWeb project request: ${org}`);
       fd.set("_replyto", replyEmail);
-      // Ensure submissions CC the BotWeb inbox (Formspree must allow this address)
-      fd.set("_cc", FORMSPREE_NOTIFY_EMAIL);
+      // Do not set _cc to the same address as Formspree's notification "to"
+      // (duplicate to/cc causes SendGrid to reject the submission).
       const res = await fetch(formspreeUrl, {
         method: "POST",
         body: fd,
@@ -202,7 +197,6 @@ export function ContactSection() {
                       className="pointer-events-none absolute left-0 top-0 h-0 w-0 opacity-0"
                       aria-hidden
                     />
-                    <input type="hidden" name="_cc" value={FORMSPREE_NOTIFY_EMAIL} />
                     {[
                       { id: "org", label: "Organization name", name: "org" },
                       { id: "contact", label: "Your name", name: "contact" },
